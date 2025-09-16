@@ -1,6 +1,6 @@
-// ====================================================================
-// 1. CÓDIGO DOS SHADERS (GLSL)
-// ====================================================================
+
+
+
 
 const vertexSource = `
     attribute vec4 a_position;
@@ -16,9 +16,9 @@ const fragmentSource = `
     }
 `;
 
-// ====================================================================
-// 2. FUNÇÕES DE GEOMETRIA
-// ====================================================================
+
+
+
 
 function createCenterSquareVertices() { return new Float32Array([-0.2,-0.2, 0.2,-0.2, 0.2,0.2, -0.2,-0.2, 0.2,0.2, -0.2,0.2]); }
 function createTopBladeVertices() { return new Float32Array([-0.2, 0.2, 0.2, 0.2, 0.0, 0.8]); }
@@ -27,23 +27,23 @@ function createBottomBladeVertices() { return new Float32Array([0.2, -0.2, -0.2,
 function createLeftBladeVertices() { return new Float32Array([-0.2, -0.2, -0.2, 0.2, -0.8, 0.0]); }
 
 
-// ====================================================================
-// 3. FUNÇÃO PRINCIPAL
-// ====================================================================
+
+
+
 
 function main2() {
     const canvas = document.getElementById('glCanvas2');
     const gl = canvas.getContext('webgl');
     if (!gl) { return; }
 
-    // --- CORREÇÃO APLICADA AQUI ---
-    // Primeiro, compilamos os shaders a partir do código fonte (texto)
+    
+    
     const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexSource);
     const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentSource);
     
-    // Depois, criamos o programa a partir dos shaders compilados
+    
     const program = createProgram(gl, vertexShader, fragmentShader);
-    // --- FIM DA CORREÇÃO ---
+    
 
     const positionLocation = gl.getAttribLocation(program, 'a_position');
     const colorLocation = gl.getUniformLocation(program, 'u_color');
@@ -59,7 +59,7 @@ function main2() {
 
     gl.useProgram(program);
 
-    // --- DESENHANDO PEÇA POR PEÇA ---
+    
     const mioloCor = [0.3, 0.3, 0.3, 1.0];
     gl.bufferData(gl.ARRAY_BUFFER, createCenterSquareVertices(), gl.STATIC_DRAW);
     gl.uniform4fv(colorLocation, mioloCor);
@@ -84,10 +84,10 @@ function main2() {
     gl.drawArrays(gl.TRIANGLES, 0, 3);
 }
 
-// ====================================================================
-// 4. INICIALIZAÇÃO
-// ====================================================================
 
-// As funções createShader e createProgram não precisam estar neste arquivo
-// porque o `flor.js` já as disponibilizou para a página inteira.
+
+
+
+
+
 window.addEventListener('load', main2);

@@ -1,6 +1,6 @@
-// ====================================================================
-// 1. CÓDIGO DOS SHADERS (GLSL)
-// ====================================================================
+
+
+
 
 const vertexShaderSource = `
     attribute vec4 a_position;
@@ -14,15 +14,15 @@ const vertexShaderSource = `
 
 const fragmentShaderSource = `
     precision mediump float;
-    uniform vec4 u_color; // A cor vem de um uniform agora
+    uniform vec4 u_color; 
     void main() {
         gl_FragColor = u_color;
     }
 `;
 
-// ====================================================================
-// 2. FUNÇÕES AUXILIARES
-// ====================================================================
+
+
+
 
 function createShader(gl, type, source) {
     const shader = gl.createShader(type);
@@ -66,12 +66,12 @@ function createCircleVertices(gl, radius, segments) {
     return new Float32Array(vertices);
 }
 
-// ====================================================================
-// 3. FUNÇÃO PRINCIPAL (MAIN)
-// ====================================================================
+
+
+
 
 function main1() {
-    const canvas = document.getElementById('glCanvas1'); // corrigido
+    const canvas = document.getElementById('glCanvas1'); 
     const gl = canvas.getContext('webgl');
     if (!gl) { return; }
 
@@ -80,13 +80,13 @@ function main1() {
     const program = createProgram(gl, vertexShader, fragmentShader);
     gl.useProgram(program);
 
-    // Pega a localização dos atributos e uniforms
+    
     const positionLocation = gl.getAttribLocation(program, 'a_position');
     const scaleLocation = gl.getUniformLocation(program, 'u_scale');
     const translationLocation = gl.getUniformLocation(program, 'u_translation');
     const colorLocation = gl.getUniformLocation(program, 'u_color');
 
-    // Configura o buffer de VÉRTICES (apenas posições)
+    
     const vertexBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
     const circleVertexData = createCircleVertices(gl, 0.5, 30);
@@ -94,34 +94,34 @@ function main1() {
     gl.enableVertexAttribArray(positionLocation);
     gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
 
-    // Limpa a tela
+    
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT);
 
-    // --- FUNÇÃO DE DESENHO ---
+    
     function drawObject(scale, transX, transY, color) {
         gl.uniform2f(scaleLocation, scale, scale);
         gl.uniform2f(translationLocation, transX, transY);
-        gl.uniform4fv(colorLocation, color); // Envia a cor como uniform
+        gl.uniform4fv(colorLocation, color); 
         const vertexCount = 30 * 3;
         gl.drawArrays(gl.TRIANGLES, 0, vertexCount);
     }
 
-    // --- CHAMADAS DE DESENHO ---
+    
 
     const verde = [0.0, 1.0, 0.0, 1.0];
     const azul = [0.0, 0.0, 1.0, 1.0];
    
-    drawObject(0.9, 0.0, 0.0, azul);  // Círculo grande
-    drawObject(0.4, 0.3, 0.0, verde); // Círculo pequeno à direita
-    drawObject(0.4, -0.3, 0.0, verde); // Círculo pequeno à esquerda
-    drawObject(0.4, 0.0, 0.6, verde);  // Círculo pequeno em cima
-    drawObject(0.4, 0.0, -0.6, verde); // Círculo pequeno embaixo
+    drawObject(0.9, 0.0, 0.0, azul);  
+    drawObject(0.4, 0.3, 0.0, verde); 
+    drawObject(0.4, -0.3, 0.0, verde); 
+    drawObject(0.4, 0.0, 0.6, verde);  
+    drawObject(0.4, 0.0, -0.6, verde); 
 }
 
-// ====================================================================
-// 4. INICIALIZAÇÃO
-// ====================================================================
+
+
+
 
 window.addEventListener('load', main1);
