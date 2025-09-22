@@ -2,32 +2,41 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Bresenham - Múltiplos Modos</title>
+    <title>Bresenham - Linhas e Circunferências</title>
     <style>
         body { font-family: sans-serif; text-align: center; background-color: #f0f0f0; }
-        .controls { margin-bottom: 20px; }
+        .controls { margin-bottom: 10px; padding: 10px; border-bottom: 1px solid #ccc; }
         label { margin: 0 10px; cursor: pointer; }
         canvas { border: 1px solid #333; background-color: white; cursor: crosshair; }
+        #circle-controls { margin-top: 10px; }
     </style>
 </head>
 <body>
-    <h1>Algoritmo de Bresenham para Circunferências</h1>
+    <h1>Algoritmo de Bresenham: Linhas e Circunferências</h1>
 
     <div class="controls">
-        <strong>Modo de Desenho:</strong>
+        <strong>Modo Principal:</strong>
         <label>
-            <input type="radio" name="drawMode" value="centerAndRadius" checked>
-            Centro e Raio Fixo
+            <input type="radio" name="mainMode" value="lines" checked> Linhas
         </label>
         <label>
-            <input type="radio" name="drawMode" value="threePoints">
-            A Partir de Três Pontos
+            <input type="radio" name="mainMode" value="circles"> Circunferências
         </label>
     </div>
 
-    <canvas id="meuCanvas" width="600" height="400"></canvas>
-    <p id="instructionText">Clique no quadro para definir o centro da circunferência.</p>
+    <div class="controls" id="circle-controls" style="display:none;">
+        <strong>Modo de Desenho de Círculo:</strong>
+        <label>
+            <input type="radio" name="circleDrawMode" value="centerAndRadius" checked> Centro e Raio Fixo
+        </label>
+        <label>
+            <input type="radio" name="circleDrawMode" value="threePoints"> A Partir de Três Pontos
+        </label>
+    </div>
 
-    <script src="bresenham.js"></script>
+    <canvas id="bresenhamCanvas" width="600" height="500"></canvas>
+    <p id="instructionText">Clique em dois pontos para desenhar uma linha. Pressione 0-9 para mudar a cor.</p>
+
+    <script src="main.js"></script>
 </body>
 </html>
