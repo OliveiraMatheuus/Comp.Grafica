@@ -1,6 +1,5 @@
 window.addEventListener('load', () => {
 
-    // --- ELEMENTOS DO DOM ---
     const canvas = document.getElementById('bresenhamCanvas');
     const ctx = canvas.getContext('2d');
     const instructionText = document.getElementById('instructionText');
@@ -8,25 +7,19 @@ window.addEventListener('load', () => {
     const circleModeRadios = document.querySelectorAll('input[name="circleDrawMode"]');
     const circleControlsDiv = document.getElementById('circle-controls');
     
-    // --- VARIÁVEIS DE ESTADO GLOBAL ---
-    let currentMainMode = 'lines'; // 'lines' ou 'circles'
+    let currentMainMode = 'lines';
     let currentCircleMode = 'centerAndRadius';
     let clickedPoints = [];
     const RAIO_FIXO = 100;
     
-    // Paleta de cores para as linhas
     const COLORS = [ "#000000", "#FF0000", "#00FF00", "#0000FF", "#FFFF00", "#FF00FF", "#00FFFF", "#C0C0C0", "#FFA500", "#800080" ];
-    let currentLineColor = COLORS[3]; // Azul como inicial
+    let currentLineColor = COLORS[3];
 
-    // --- FUNÇÕES DE DESENHO E CÁLCULO ---
-
-    // Função genérica para desenhar um "pixel" no canvas 2D
     function plotPixel(x, y, color, size = 3) {
         ctx.fillStyle = color;
         ctx.fillRect(x - Math.floor(size / 2), y - Math.floor(size / 2), size, size);
     }
 
-    // --- LÓGICA PARA DESENHAR LINHAS ---
     function bresenhamLine(x0, y0, x1, y1) {
         const points = [];
         const dx = Math.abs(x1 - x0);
@@ -45,9 +38,8 @@ window.addEventListener('load', () => {
         return points;
     }
 
-    // --- LÓGICA PARA DESENHAR CIRCUNFERÊNCIAS ---
     function plotCirclePoints(xc, yc, x, y) {
-        const color = '#0000FF'; // Cor fixa para círculos
+        const color = '#0000FF';
         plotPixel(xc + x, yc + y, color); plotPixel(xc - x, yc + y, color);
         plotPixel(xc + x, yc - y, color); plotPixel(xc - x, yc - y, color);
         plotPixel(xc + y, yc + x, color); plotPixel(xc - y, yc + x, color);
@@ -67,7 +59,7 @@ window.addEventListener('load', () => {
 
     function calculateCircleFromPoints(p1, p2, p3) {
         const D = 2 * (p1.x * (p2.y - p3.y) + p2.x * (p3.y - p1.y) + p3.x * (p1.y - p2.y));
-        if (Math.abs(D) < 1e-6) { return null; } // Pontos colineares
+        if (Math.abs(D) < 1e-6) { return null; }
         const p1_sq = p1.x * p1.x + p1.y * p1.y;
         const p2_sq = p2.x * p2.x + p2.y * p2.y;
         const p3_sq = p3.x * p3.x + p3.y * p3.y;
@@ -78,18 +70,16 @@ window.addEventListener('load', () => {
         return { center, radius };
     }
 
-    // --- LÓGICA DE CONTROLE E EVENTOS ---
-
     function resetState() {
         clickedPoints = [];
-        ctx.clearRect(0, 0, canvas.width, canvas.height); // Limpa o canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
         updateInstructions();
     }
 
     function updateInstructions() {
         if (currentMainMode === 'lines') {
             instructionText.textContent = `Clique em 2 pontos para desenhar uma linha. Pontos: ${clickedPoints.length}/2. Pressione 0-9 para mudar a cor.`;
-        } else { // circles
+        } else {
             if (currentCircleMode === 'centerAndRadius') {
                 instructionText.textContent = "Clique no quadro para definir o centro da circunferência.";
             } else {
@@ -98,7 +88,6 @@ window.addEventListener('load', () => {
         }
     }
 
-    // Event listener para o modo principal (Linhas vs Círculos)
     mainModeRadios.forEach(radio => {
         radio.addEventListener('change', (event) => {
             currentMainMode = event.target.value;
@@ -107,7 +96,6 @@ window.addEventListener('load', () => {
         });
     });
     
-    // Event listener para o sub-modo dos círculos
     circleModeRadios.forEach(radio => {
         radio.addEventListener('change', (event) => {
             currentCircleMode = event.target.value;
@@ -115,7 +103,6 @@ window.addEventListener('load', () => {
         });
     });
 
-    // Event listener para cliques no canvas
     canvas.addEventListener('click', (event) => {
         const rect = canvas.getBoundingClientRect();
         const mouseX = Math.round(event.clientX - rect.left);
@@ -123,22 +110,22 @@ window.addEventListener('load', () => {
 
         if (currentMainMode === 'lines') {
             clickedPoints.push({ x: mouseX, y: mouseY });
-            plotPixel(mouseX, mouseY, '#000000'); // Marca o ponto clicado
+            plotPixel(mouseX, mouseY, '#000000');
             updateInstructions();
 
             if (clickedPoints.length === 2) {
                 const linePoints = bresenhamLine(clickedPoints[0].x, clickedPoints[0].y, clickedPoints[1].x, clickedPoints[1].y);
                 linePoints.forEach(p => plotPixel(p.x, p.y, currentLineColor));
-                clickedPoints = []; // Reinicia para a próxima linha
+                clickedPoints = [];
                 updateInstructions();
             }
-        } else { // circles
+        } else {
             if (currentCircleMode === 'centerAndRadius') {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 drawCircleBresenham(mouseX, mouseY, RAIO_FIXO);
-            } else { // threePoints
+            } else {
                 clickedPoints.push({ x: mouseX, y: mouseY });
-                plotPixel(mouseX, mouseY, '#FF0000'); // Marca o ponto clicado em vermelho
+                plotPixel(mouseX, mouseY, '#FF0000');
                 updateInstructions();
 
                 if (clickedPoints.length === 3) {
@@ -146,14 +133,13 @@ window.addEventListener('load', () => {
                     if (circle) {
                         drawCircleBresenham(Math.round(circle.center.x), Math.round(circle.center.y), Math.round(circle.radius));
                     }
-                    clickedPoints = []; // Reinicia
+                    clickedPoints = [];
                     updateInstructions();
                 }
             }
         }
     });
 
-    // Event listener para mudança de cor das linhas via teclado
     window.addEventListener("keydown", (event) => {
         const key = parseInt(event.key);
         if (!isNaN(key) && key >= 0 && key <= 9) {
@@ -162,6 +148,5 @@ window.addEventListener('load', () => {
         }
     });
 
-    // Inicia o estado da UI
     resetState();
 });
