@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualização 3D e Câmera</title>
+    <style>
+        body { 
+            margin: 20px; 
+            font-family: Arial, sans-serif; 
+            text-align: center;
+            background-color: #f0f0f0;
+        }
+        canvas { 
+            border: 2px solid #333; 
+            background-color: #000; 
+        }
+        h1 { color: #333; }
+        h3 { color: #555; margin: 5px; }
+        div {
+            display: inline-block;
+            border: 1px solid #ccc;
+            padding: 10px;
+            background-color: #fff;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <h1>Exercício de Câmera Perspectiva</h1>
+    <canvas id="glCanvas" width="800" height="600"></canvas>
+    <div>
+        <h3>Controles da Câmera:</h3>
+        <p>
+            <b>W/S:</b> Mover para Frente / Trás<br>
+            <b>A/D:</b> Mover para Esquerda / Direita<br>
+            <b>E/Q:</b> Mover para Cima / Baixo<br>
+            <b>Setas ←/→:</b> Girar Câmera (Yaw)
+        </p>
+    </div>
+
+    <script src="m4.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
